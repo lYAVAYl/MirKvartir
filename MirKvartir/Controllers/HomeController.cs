@@ -11,27 +11,101 @@ namespace MirKvartir.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        #region Start
+        //private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        //public IActionResult Privacy()
+        //{
+        //    return View();
+        //}
+
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
+        #endregion
+
+        IUserRepository repo;
+        public HomeController(IUserRepository r)
         {
-            _logger = logger;
+            repo = r;
+        }
+        public ActionResult Index()
+        {
+            return View(repo.GetUsers());
         }
 
-        public IActionResult Index()
+        public ActionResult Details(int id)
+        {
+            User user = repo.Get(id);
+            if (user != null)
+                return View(user);
+            return NotFound();
+        }
+
+        [HttpGet]
+        public ActionResult Create()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public ActionResult Create(User user)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                repo.Create(user);
+                return RedirectToAction("Index");
+            }
+
+            return View(user);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public ActionResult Edit(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            User user = repo.Get(id);
+            if (user != null)
+                return View(user);
+            return NotFound();
+        }
+
+        [HttpPost]
+        public ActionResult Edit(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                repo.Update(user);
+                return RedirectToAction("Index");
+            }
+
+            return View(user);
+        }
+
+        [HttpGet]
+        [ActionName("Delete")]
+        public ActionResult ConfirmDelete(int id)
+        {
+            User user = repo.Get(id);
+            if (user != null)
+                return View(user);
+            return NotFound();
+        }
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            repo.Delete(id);
+            return RedirectToAction("Index");
         }
     }
 }

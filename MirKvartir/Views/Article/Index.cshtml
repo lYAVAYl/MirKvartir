@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MirKvartir.Models.Article>
+
+@{
+    ViewData["Title"] = "Статьи";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <tr>
+        <th>Статья</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Text</td>
+            <td>
+                <a asp-controller="Article" asp-action="ShowArticle" asp-route-id="@item.ArticleId">Посмотреть</a> |
+            </td>
+        </tr>
+    }
+</table>

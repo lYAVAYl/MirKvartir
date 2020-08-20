@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MirKvartir.Models;
 
 namespace MirKvartir
 {
@@ -23,6 +24,10 @@ namespace MirKvartir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = @"data source=DESKTOP-1488\SQLEXPRESS; initial catalog=MirKvartirDB; integrated security=True; MultipleActiveResultSets=True;";
+            services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
+            services.AddTransient<IArticleRepository, ArticleRepository>(provider => new ArticleRepository(connectionString));
+
             services.AddControllersWithViews();
         }
 
@@ -36,7 +41,7 @@ namespace MirKvartir
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

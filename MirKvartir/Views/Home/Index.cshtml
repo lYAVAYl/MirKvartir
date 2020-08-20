@@ -1,8 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<MirKvartir.Models.User>
+@{
+    ViewData["Title"] = "Список пользователей";
 }
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-controller="Home" asp-action="Create">Добавить</a>
+</p>
+<table class="table">
+    <tr>
+        <th>Имя</th>
+        <th></th>
+    </tr>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UserId</td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@item.UserId">Изменить</a> |
+                <a asp-controller="Home" asp-action="Delete" asp-route-id="@item.UserId">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>
