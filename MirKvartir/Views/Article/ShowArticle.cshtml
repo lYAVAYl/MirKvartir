@@ -2,16 +2,27 @@
 
 @{
     ViewData["Title"] = "Интересная статья";
+    CommentListModel commentList = (CommentListModel)ViewData["Comments"];
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div>
     <div class="form-group">
-       
+
         <p>@Model.Text</p>
 
     </div>
+
+    <br />
+    <br />
+
+    <div>
+        @Html.Partial("_TreeView", commentList)
+    </div>
+    
+
+    
 
 </div>
 

@@ -24,9 +24,10 @@ namespace MirKvartir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = @"data source=DESKTOP-1488\SQLEXPRESS; initial catalog=MirKvartirDB; integrated security=True; MultipleActiveResultSets=True;";
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
             services.AddTransient<IArticleRepository, ArticleRepository>(provider => new ArticleRepository(connectionString));
+            services.AddTransient<IPageCommentRepository, PageCommentRepository>(provider => new PageCommentRepository(connectionString));
 
             services.AddControllersWithViews();
         }
@@ -34,8 +35,10 @@ namespace MirKvartir
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // если приложение в процессе разработки
             if (env.IsDevelopment())
             {
+                // то выводим информацию об ошибке, при наличии ошибки
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -47,10 +50,12 @@ namespace MirKvartir
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // добавляем возможности маршрутизации
             app.UseRouting();
 
             app.UseAuthorization();
 
+            // устанавливаем адреса, которые будут обрабатываться
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

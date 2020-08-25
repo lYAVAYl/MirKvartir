@@ -1,0 +1,40 @@
+﻿@model MirKvartir.Models.CommentListModel
+
+@if (Model.Comments.Where(x => x.Parent == Model.Seed).Any())
+{
+    <ul>
+        @foreach (var node in Model.Comments)
+        {
+            @if (node.Parent == Model.Seed)
+            {
+                MirKvartir.Models.CommentListModel inner = new MirKvartir.Models.CommentListModel { Seed = node.CommentId, Comments = Model.Comments };
+                <li>
+                    <div>
+                        <div class="drop" parent-id="@node.CommentId">
+                            @if (node.Parent == null)
+                            {
+                                <h5>@node.UserName</h5>
+                            }
+                            else
+                            {
+                                <h5>@node.UserName</h5>
+                            }
+
+                            <p>@node.Text</p>
+                        </div>
+
+                        @*удалить*@
+                        <div>
+
+                        </div>
+                        @*редактировать*@
+                        <div>
+
+                        </div>
+                    </div>
+                    @Html.Partial("_TreeView", inner)
+                </li>
+            }
+        }
+    </ul>
+}

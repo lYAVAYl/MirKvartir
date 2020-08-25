@@ -46,9 +46,9 @@ namespace MirKvartir.Controllers
             return View(repo.GetUsers());
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(string log)
         {
-            User user = repo.Get(id);
+            User user = repo.Get(log);
             if (user != null)
                 return View(user);
             return NotFound();
@@ -72,9 +72,10 @@ namespace MirKvartir.Controllers
             return View(user);
         }
 
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public ActionResult Edit(string Name)
         {
-            User user = repo.Get(id);
+            User user = repo.Get(Name);
             if (user != null)
                 return View(user);
             return NotFound();
@@ -94,9 +95,9 @@ namespace MirKvartir.Controllers
 
         [HttpGet]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(int id)
+        public ActionResult ConfirmDelete(string Name)
         {
-            User user = repo.Get(id);
+            User user = repo.Get(Name);
             if (user != null)
                 return View(user);
             return NotFound();

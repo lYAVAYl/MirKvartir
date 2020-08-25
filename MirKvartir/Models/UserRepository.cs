@@ -12,7 +12,7 @@ namespace MirKvartir.Models
     {
         void Create(User user);
         void Delete(int id);
-        User Get(int id);
+        User Get(string log);
         List<User> GetUsers();
         void Update(User user);
     }
@@ -24,26 +24,24 @@ namespace MirKvartir.Models
         {
             connectionString = conn;
         }
+
         public List<User> GetUsers()
         {
-            //return new List<User>();
             List<User> users;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 users = db.Query<User>("GetUsers", commandType: CommandType.StoredProcedure).ToList();
             }
 
-            return users ?? new List<User>();
+            return users;
         }
 
-        public User Get(int id)
+        public User Get(string log)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<User>("SELECT * FROM Users WHERE UserId = @id", new { id }).FirstOrDefault();
+                return db.Query<User>("GetUser", new { log }, commandType:CommandType.StoredProcedure).FirstOrDefault();
             }
-
-            return new User();
         }
 
         public void Create(User user)

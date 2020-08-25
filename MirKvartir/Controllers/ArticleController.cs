@@ -9,27 +9,52 @@ namespace MirKvartir.Controllers
 {
     public class ArticleController : Controller
     {
-        IArticleRepository repo;
-        public ArticleController(IArticleRepository r)
+        IArticleRepository repoArticle;
+        IPageCommentRepository repoComments;
+        public ArticleController(IArticleRepository rArticle, IPageCommentRepository rComments)
         {
-            repo = r;
+            repoArticle = rArticle;
+            repoComments = rComments;
         }
 
         public ActionResult Index()
         {
-            return View(repo.GetArticles());
+            return View(repoArticle.GetArticles());
         }
 
         [HttpGet]
         public ActionResult ShowArticle(int id)
         {
-            Article article = repo.Get(id);
+            Article article = repoArticle.Get(id);
             if (article != null)
             {
+                CommentListModel commentList = new CommentListModel()
+                {
+                    Comments = repoComments.GetComments(id).ToArray().Select(x=>new PageComment()
+                    {
+                        CommentId = x.CommentId,
+                        Level = x.Level, 
+                        Parent = x.Parent,
+                        Text = x.Text,
+                        UserId = x.UserId,
+                        UserName = x.UserName
+                    })
+                };
+
+                ViewData["Comments"] = commentList;
+
                 return View(article);
             }
 
             return NotFound();
+        }
+
+        [HttpPost]
+        public ActionResult ShowArticle()
+        {
+
+
+            return null;
         }
     }
 }

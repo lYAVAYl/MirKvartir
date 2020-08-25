@@ -20,8 +20,10 @@
                 @item.Name
             </td>
             <td>
-                <a asp-controller="Home" asp-action="Edit" asp-route-id="@item.UserId">Изменить</a> |
-                <a asp-controller="Home" asp-action="Delete" asp-route-id="@item.UserId">Удалить</a>
+                @Html.ActionLink("Изменить", "Edit", "Home", new { item.Name })
+                @Html.ActionLink("Удалить", "Delete", "Home", new { item.Name })
+                @*<a asp-controller="Home" asp-action="Edit" asp-route-id="@item.Name">Изменить</a> |*@
+                @*<a asp-controller="Home" asp-action="Delete" asp-route-id="@item.Name">Удалить</a>*@
             </td>
         </tr>
     }
